@@ -1,0 +1,10 @@
+PASOS PARA SUBIR A GITHUB
+
+1. Entra al repositorio de tu fork.
+2. Presiona Add file.
+3. Selecciona Upload files.
+4. Sube todos los archivos y carpetas de este proyecto.
+5. En el mensaje del commit escribe: Proyecto reconocimiento facial.
+6. Presiona Commit changes.
+7. Verifica que aparezcan README.md y requirements.txt.
+8. Toma captura de pantalla del repositorio con los cambios y súbela a la plataforma.

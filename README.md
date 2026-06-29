@@ -1,97 +1,151 @@
-# MoodMeter 📊🎭 — Decodificador de Expresiones Faciales con IA
+# Sistema de asistencia automatizada con reconocimiento facial
 
-**MoodMeter** es un playground interactivo y didáctico de visión por computadora diseñado para analizar emociones y microexpresiones faciales en tiempo real. 
+Este proyecto implementa un sistema básico de visión por computadora para registrar asistencia mediante reconocimiento facial en tiempo real usando la cámara de la computadora.
 
-Impulsado por **FastAPI** en el backend y la librería de aprendizaje profundo **DeepFace**, el sistema traduce capturas de video en distribuciones de probabilidad emocional usando una **Red Neuronal Convolucional (CNN)** de última generación y despliega un dashboard con estética premium **Glassmorphism en Modo Oscuro** junto con explicaciones conceptuales integradas.
+El sistema permite:
 
----
+- Registrar rostros de estudiantes o empleados.
+- Entrenar un modelo de reconocimiento facial.
+- Detectar rostros en tiempo real con la cámara.
+- Reconocer a la persona detectada.
+- Registrar la asistencia en un archivo CSV.
+- Simular una notificación cuando una persona es reconocida.
 
-## 🧠 ¿Cómo Decodifica la IA las Emociones?
+## Proyecto elegido
 
-A diferencia de las computadoras, los seres humanos percibimos expresiones faciales de forma instantánea y subconsciente. Para que una máquina replique esto, implementa un pipeline convolucional jerárquico paso a paso:
+Proyecto 1: Sistema de asistencia automatizada con reconocimiento facial.
 
-```
-[ Entrada: Webcam o Foto ]
-          │
-          ▼
-[ Detector de Rostro (OpenCV) ] ──> Recorta el rostro y alinea ojos y boca.
-          │
-          ▼
-[ Capas Convolucionales de la CNN ] ──> Extraen rasgos abstractos (comisura de labios, cejas).
-          │
-          ▼
-[ Capa Completamente Conectada ] ──> Genera 7 puntuaciones brutas (logits) de emoción.
-          │
-          ▼
-[ Función de Activación Softmax ] ──> Normaliza los logits en probabilidades (suman 100%).
-          │
-          ├───────────────────────────┐
-          ▼                           ▼
-[ Medidores Neón en Vivo ]     [ Curva Dinámica (Mood Timeline) ]
-```
+## Tecnologías utilizadas
 
-### La Matemática Detrás: Función Softmax
-La última capa de la red de emociones arroja puntuaciones crudas ($z_i$) para cada emoción básica. Para traducir estas puntuaciones abstractas en porcentajes legibles que sumen exactamente **100%**, la red implementa la función matemática **Softmax**:
+- Python
+- OpenCV
+- NumPy
+- Pandas
+- Haar Cascade para detección de rostros
+- LBPH Face Recognizer para reconocimiento facial
 
-$$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$$
+## Estructura del proyecto
 
-* La función aplica un operador exponencial ($e^{z_i}$) a cada puntuación para asegurar que todos los valores sean estrictamente positivos.
-* Luego, divide cada valor por la suma de todos los exponenciales ($\sum e^{z_j}$), convirtiendo los números en una distribución de probabilidad coherente.
-* La probabilidad más alta indica la **emoción dominante** calculada por la IA.
-
----
-
-## 📂 Estructura del Repositorio
-
-La arquitectura del proyecto está optimizada para ser ligera, rápida y 100% libre de bases de datos persistentes:
-
-```
-computerV/
-├── app/
-│   ├── main.py                 # Servidor FastAPI con pipeline de inferencia DeepFace
-│   └── templates/
-│       ├── index.html          # Frontend premium en HTML5 con Canvas y webcam
-│       └── style.css           # Estilos de alta gama (neón, vidrio esmerilado y animaciones)
-├── requirements.txt            # Dependencias del proyecto de Python
-└── start.sh                    # Script bash para instalación y arranque automático
+```text
+computerV_reconocimiento_facial/
+├── app.py
+├── requirements.txt
+├── README.md
+├── src/
+│   ├── config.py
+│   ├── register_faces.py
+│   ├── train_model.py
+│   └── attendance.py
+└── data/
+    ├── faces/
+    ├── models/
+    └── attendance/
 ```
 
----
+## Instalación
 
-## 🛠️ Instalación y Arranque Automático
+Primero se debe clonar o descargar el repositorio. Después se recomienda crear un entorno virtual.
 
-Sigue estos sencillos pasos para instalar y poner en marcha **MoodMeter** en tu máquina local:
-
-### 1. Navegar al Directorio del Proyecto
 ```bash
-cd /Users/leonelmendiola/computerV
+python -m venv venv
 ```
 
-### 2. Arrancar la Aplicación
-El sistema incluye un script automatizado `start.sh` que se encargará de crear el entorno virtual (`venv`), actualizar `pip`, instalar todas las dependencias y levantar el servidor FastAPI:
+Activar el entorno virtual en Windows:
+
 ```bash
-./start.sh
+venv\Scripts\activate
 ```
 
-### 3. Abrir el Navegador
-Una vez que el servidor reporte estar listo, abre tu navegador en:
-👉 **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+Activar el entorno virtual en Mac o Linux:
 
-> 💡 **Nota de Primera Ejecución**: La primera vez que presiones "Escanear Rostro", DeepFace descargará automáticamente los pesos preentrenados del clasificador de emociones de Keras (~20MB). Este proceso se realiza una sola vez de forma interna y tardará solo unos segundos según tu velocidad de internet.
+```bash
+source venv/bin/activate
+```
 
----
+Instalar dependencias:
 
-## 💻 Características del Dashboard
+```bash
+pip install -r requirements.txt
+```
 
-* **Captura Multidispositivo**: Si cuentas con cámara web activa, la rejilla láser cibernética escaneará tu rostro en vivo. Si no posees cámara web, haz clic en **Archivo** para subir cualquier fotografía local.
-* **Mira Láser Flotante**: Al completar el escaneo, verás un recuadro cibernético dashed de color cian dibujado exactamente sobre las coordenadas físicas de tu rostro.
-* **Gauges de Distribución**: Muestra barras neón de colores que representan el peso asignado por la red a cada emoción en tiempo real.
-* **Mood Timeline (Línea de Tiempo)**: Un gráfico dinámico hecho con HTML5 Canvas que conecta los puntos de tus escaneos secuenciales. La curva cambia de color dinámicamente según la emoción dominante registrada en cada paso, ilustrando tu transición emocional (ej. de enojo a alegría).
+## Cómo ejecutar el proyecto
 
----
+### Opción recomendada: menú principal
 
-## ⚡ Tecnologías Utilizadas
-* **FastAPI** — API de alta velocidad en Python.
-* **DeepFace** — Framework de análisis facial inmersivo.
-* **OpenCV** — Localización y procesamiento espacial del rostro.
-* **HTML5 / CSS3 / JavaScript (ES6)** — Frontend premium inmersivo sin dependencias pesadas.
+Ejecuta:
+
+```bash
+python app.py
+```
+
+El menú permite elegir entre registrar rostros, entrenar el modelo o iniciar el sistema de asistencia.
+
+## Flujo de uso
+
+### 1. Registrar rostros
+
+Ejecuta:
+
+```bash
+python src/register_faces.py
+```
+
+El programa pedirá el nombre de la persona. Después abrirá la cámara y guardará varias capturas del rostro en la carpeta `data/faces`.
+
+Para capturar correctamente:
+
+- Mira directamente a la cámara.
+- Procura tener buena iluminación.
+- Evita cubrir el rostro.
+- Presiona `q` para salir antes si es necesario.
+
+### 2. Entrenar el modelo
+
+Después de registrar al menos una persona, ejecuta:
+
+```bash
+python src/train_model.py
+```
+
+Esto entrenará el modelo LBPH y guardará los archivos en `data/models`.
+
+### 3. Registrar asistencia
+
+Ejecuta:
+
+```bash
+python src/attendance.py
+```
+
+El sistema abrirá la cámara, detectará rostros y tratará de reconocerlos. Cuando reconoce a una persona, registra su asistencia en un archivo CSV dentro de `data/attendance`.
+
+Para cerrar la cámara, presiona `q`.
+
+## Archivo de asistencia
+
+El archivo generado tendrá un formato similar a:
+
+```csv
+nombre,fecha,hora
+Carlos,2026-06-29,12:35:10
+```
+
+El sistema evita registrar varias veces a la misma persona durante la misma ejecución.
+
+## Simulación de notificación
+
+Cuando una persona es reconocida, el sistema imprime un mensaje simulando una notificación:
+
+```text
+Notificación: Carlos ha registrado asistencia correctamente.
+```
+
+Esta parte simula la comunicación con padres, supervisores o responsables.
+
+## Notas importantes
+
+Este proyecto es una implementación académica básica. Para un uso real se deberían agregar medidas de seguridad, consentimiento informado, protección de datos personales y validaciones adicionales para evitar errores de reconocimiento.
+
+## Conclusión
+
+El proyecto demuestra cómo la visión por computadora puede utilizarse para automatizar el registro de asistencia mediante detección y reconocimiento facial. Aunque algunas partes se simulan con mensajes en consola, el sistema cumple con la funcionalidad principal: detectar, reconocer y registrar la asistencia de una persona usando la cámara.
